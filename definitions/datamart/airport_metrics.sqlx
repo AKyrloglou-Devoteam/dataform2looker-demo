@@ -1,0 +1,15 @@
+config {
+  type: "table",
+  schema: "data__datamart",
+  description: "Key airport metrics for reporting."
+}
+
+SELECT
+  state_abbreviation,
+  COUNT(DISTINCT CASE WHEN airport_type_grouped = 'large_airport' THEN object_id ELSE NULL END) AS large_airport_count,
+  COUNT(DISTINCT CASE WHEN airport_type_grouped = 'small_airport' THEN object_id ELSE NULL END) AS small_airport_count,
+  COUNT(DISTINCT CASE WHEN airport_type_grouped = 'medium_airport' THEN object_id ELSE NULL END) AS medium_airport_count,
+  COUNT(DISTINCT CASE WHEN airport_type_grouped = 'seaplane_base' THEN object_id ELSE NULL END) AS seaplane_base_count
+FROM
+  ${ref('data__staging', 'airports_cleaned')}
+GROUP BY 1

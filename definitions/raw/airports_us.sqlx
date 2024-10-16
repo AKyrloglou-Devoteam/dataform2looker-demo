@@ -1,0 +1,11 @@
+config {
+    type: "declaration",
+    database: "dataform2looker-demo",
+    schema: "data__raw",
+    name: "us_airports"
+}
+
+declare({
+    schema: "data__raw",
+    name: "us_airports"
+})

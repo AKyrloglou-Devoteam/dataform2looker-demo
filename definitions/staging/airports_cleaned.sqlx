@@ -1,0 +1,27 @@
+config {
+  type: "table",
+  schema: "data__staging",
+  description: "Cleaned airports data with standardized names and derived columns."
+}
+
+SELECT
+  object_id,
+  global_id,
+  faa_identifier,
+  UPPER(name) AS airport_name,  -- Standardize airport names to uppercase
+  latitude,
+  longitude,
+  airport_geom,
+  elevation,
+  icao_id,
+  CASE
+    WHEN airport_type = 'balloonport' THEN 'other'  -- Group less common types as "other"
+    WHEN airport_type = 'heliport' THEN 'other'
+    ELSE airport_type
+  END AS airport_type_grouped,
+  service_city,
+  state_abbreviation,
+  country
+FROM
+  ${ref('data__raw', 'us_airports')}  -- Reference the raw table
+WHERE NOT faa_identifier IS NULL  -- Filter out records with missing FAA identifiers

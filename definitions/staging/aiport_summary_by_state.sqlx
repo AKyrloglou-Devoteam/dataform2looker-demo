@@ -1,0 +1,13 @@
+config {
+  type: "table",
+  schema: "data__staging",
+  description: "Summary of airports by state."
+}
+
+SELECT
+  state_abbreviation,
+  airport_type_grouped,
+  COUNT(*) AS airport_count
+FROM
+  ${ref('data__staging', 'airports_cleaned')}
+GROUP BY 1, 2
